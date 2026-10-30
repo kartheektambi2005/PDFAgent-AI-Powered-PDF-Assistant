@@ -1,0 +1,6 @@
+flask
+pypdf
+numpy
+requests
+python-dotenv
+pytest
