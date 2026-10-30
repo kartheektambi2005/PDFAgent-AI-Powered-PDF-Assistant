@@ -1,5 +1,6 @@
 """Settings read from environment (.env is loaded for local use). No secrets live in source."""
 import os
+import tempfile
 
 from dotenv import load_dotenv
 
@@ -19,6 +20,8 @@ CHUNK_OVERLAP = 120
 MAX_PDF_BYTES = 20 * 1024 * 1024
 MAX_QUESTION_CHARS = 500
 
-DB_PATH = os.getenv("DB_PATH", os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "rag.db"))
+# Vercel's project directory is read-only; only the temp dir (/tmp) is writable there.
+_DB_DIR = tempfile.gettempdir() if os.getenv("VERCEL") else os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")
+DB_PATH = os.getenv("DB_PATH", os.path.join(_DB_DIR, "rag.db"))
 
 REFUSAL = "I couldn't find sufficient information in the uploaded document to answer this question."
